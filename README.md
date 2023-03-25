@@ -55,14 +55,10 @@ You can log after you run the server (see next 'Run server' instructions below.)
 | typeUser | email | password | user_id 
 |-|-|-|-|
 | SuperUser | admin@epicsevents.com | pwd_admin_epicsevents | 1
-
 | Manager | manager1@epicsevents.com | man_epic_pwd | 3
 | Manager | manager2@epicsevents.com | man_epic_pwd | 8
-
-
 | Sale | sale1@epicsevents.com | sale_epic_pwd | 4
 | Sale | sale2@epicsevents.com | sale_epic_pwd | 5
-
 | Support | support1@epicsevents.com | sup_epic_pwd | 6
 | Support | support2@epicsevents.com | sup_epic_pwd | 7
 
@@ -113,7 +109,7 @@ Server adress : [http://127.0.0.1:8000](http://127.0.0.1:8000)
 ## API documentation
 On the documentation, you can see all the endpoints and also some rules about permissions, contraints and restrictions.
 
-API documentation : [https://documenter.getpostman.com/view/25526925/2s8ZDeSy1a](https://documenter.getpostman.com/view/25526925/2s8ZDeSy1a)
+
 
 ## Other things about this project
 This project use the module flake8 to respect pep8 guideline.
@@ -124,6 +120,6 @@ flake8 softdesk --format=html --htmldir=flake8-report --max-line-length=120 --ex
 
 To test with line command without generating a html report
 ```
-flake8 softdesk --max-line-length=120 --exclude=migrations
+flake8 crm --max-line-length=120 --exclude=migrations
 ```
 
