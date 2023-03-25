@@ -1,9 +1,0 @@
-bin
-include
-lib
-.Python
-# tests/
-specs/
-.envrc
-__pycache__
-old_*.py
