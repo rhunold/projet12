@@ -5,18 +5,18 @@ Epic Events Employees use a CRM.
 
 Each Employee have specific permissions based on their tasks
 
-Admin can access [the admi](http://127.0.0.1:8000/admin), [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with Postman to to :
+Admin can access [the admi](http://127.0.0.1:8000/admin), [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to :
 - create, view, modify and delete Employees, Clients, Contracts and Events
 - Modify each Group permissions
 
-Managers can access [the admi](http://127.0.0.1:8000/admin), [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with Postman to to :
+Managers can access [the admi](http://127.0.0.1:8000/admin), [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to to :
 - create, view, modify and delete Employees (he can create another manager but can not modify it)
 - give permission to Employee depending on their department
 - create, view, modify and delete Clients
 - create, view, modify and delete Contracts
 - create, view, modify and delete Events
 
-Sales people can access [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with Postman to :
+Sales people can access [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to :
 - view Employees, Clients and Events
 - create and view every Clients
 - modify and delete the Clients they are assigned
@@ -24,13 +24,17 @@ Sales people can access [the Web browsable API](http://127.0.0.1:8000/api/login/
 - modify and delete the Contracts they are assigned
 - create Events
 
-Support people can access [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with Postman to :
+Support people can access [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to :
 - view Employees and Clients
 - view, modify and delete the Events they are assigned
 
 
 
 This CRM is built on Django and Django Rest Framework
+
+## ERD
+
+![ERD](utilities/ERD_Projet_12.png)
 
 
 ## Installation
@@ -105,9 +109,7 @@ You can log after you run the server (see next 'Run server' instructions below.)
 | Sale | sale2@epicsevents.com | sale_epic_pwd | 5
 | Support | support1@epicsevents.com | sup_epic_pwd | 6
 | Support | support2@epicsevents.com | sup_epic_pwd | 7
-
 | None | test@epicsevents.com | test_epic_pwd | 9
-
 | None | test2@epicsevents.com | test_epic_pwd | 12
 
 
