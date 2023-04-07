@@ -47,7 +47,6 @@ class ClientViewset(ModelViewSet):
         if user in sales_employees:
             queryset = Client.objects.filter(sales_contact=user)
         elif user in support_employees:
-            # support_employee_clients = Event.objects.filter(support_contact=user).values_list('client', flat=True)
             support_employee_contrats = Event.objects.filter(support_contact=user).values_list('contrat', flat=True)
             support_employee_clients = Client.objects.filter(id__in=support_employee_contrats)
             queryset = Client.objects.filter(id__in=support_employee_clients)         
