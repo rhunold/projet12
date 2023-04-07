@@ -38,10 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'authentication',
+
     'crm',
     'rest_framework',
     'rest_framework_simplejwt',
+    # 'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -140,12 +141,59 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        "rest_framework.authentication.SessionAuthentication",        
+
         )
 }
+
+LOGIN_REDIRECT_URL = '/clients/'
+
 
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=10),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),   
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'console': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+        'file': {
+            'format': '{levelname} {asctime} {module}-{message}',
+            'style': '{',
+        },
+    },
+    'loggers': {
+        'django': {
+            'level': 'INFO',
+            'handlers': ['console', 'file'],
+            'propagate': True,
+        },
+   
+        # "django.request": {
+        #     "level": "ERROR",            
+        #     "handlers": ['console', 'file'],
+        #     "propagate": True,
+        # },
+    },    
+    
+    'handlers': {
+        'console': {
+            'level': 'INFO',            
+            'class': 'logging.StreamHandler',
+            'formatter': 'console'
+        },        
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            "formatter": "file",            
+            'filename': '../utilities/errors.log',
+        },
+    },
+
+}
