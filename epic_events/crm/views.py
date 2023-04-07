@@ -1,56 +1,63 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import SearchFilter
 
-from rest_framework import status
-from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-
-from rest_framework.permissions import AllowAny, DjangoModelPermissions # , IsAuthenticated, 
-
-from rest_framework.exceptions import APIException, ValidationError
-
+from .overrides import AddGetDjangoModelPermissions
 from .models import Employee, Client, Contract, Event
 
-from .serializers import (
-    # EmployeeSerializer,
-    # ClientSerializer,    
-    ClientListSerializer, ClientDetailSerializer,
-    ContractListSerializer, ContractDetailSerializer,
-    EventListSerializer, EventDetailSerializer,    
-    )
+from .serializers import *
+
+import logging
 
 
-# class SignUpView(ModelViewSet):
-#     permission_classes = [AllowAny]
-#     serializer_class = EmployeeSerializer
+class EmployeeViewset(ModelViewSet):
+    permission_classes = [AddGetDjangoModelPermissions]
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return EmployeeListSerializer
+        return EmployeeDetailSerializer
 
-class AddGetDjangoModelPermissions(DjangoModelPermissions):
-    def __init__(self):
-        self.perms_map['GET'] = ['%(app_label)s.view_%(model_name)s']
-
-
+    def get_queryset(self):
+        # Exclude the admin user
+        queryset = Employee.objects.exclude(id=1)
+        return queryset
+    
 
 class ClientViewset(ModelViewSet):
     permission_classes = [AddGetDjangoModelPermissions]
+    # queryset = Client.objects.all()
     
+    filter_backends = [SearchFilter]    
+    search_fields = ['company_name', 'last_name', 'email']
+
     def get_serializer_class(self):
         if self.action == 'list':
             return ClientListSerializer
         return ClientDetailSerializer
 
+
     def get_queryset(self):
-        user = self.request.user
-        print(user.id)
-        print(user)
-        
         queryset = Client.objects.all()
+        
+        user = Employee.objects.get(id=self.request.user.id)
+
+        sales_employees = Employee.objects.filter(department="SALES")
+        support_employees = Employee.objects.filter(department="SUPPORT")
+           
+        if user in sales_employees:
+            queryset = Client.objects.filter(sales_contact=user)
+        elif user in support_employees:
+            support_employee_clients = Event.objects.filter(support_contact=user).values_list('client', flat=True)
+            queryset = Client.objects.filter(id__in=support_employee_clients)         
         return queryset
     
-  
-
 
   
 class ContractViewset(ModelViewSet):
     permission_classes = [AddGetDjangoModelPermissions]
+    
+    filter_backends = [SearchFilter]    
+    search_fields = ['client__company_name', 'client__last_name', 'client__email', 'creation_date', 'amount']    
     
     def get_serializer_class(self):
         if self.action == 'list':
@@ -58,16 +65,21 @@ class ContractViewset(ModelViewSet):
         return ContractDetailSerializer
 
     def get_queryset(self):
-        user = self.request.user
-        print(user.id)
-        print(user)        
-
-        queryset = Contract.objects.all()
+        queryset = Contract.objects.all()    
+        user = Employee.objects.get(id=self.request.user.id)
+        sales_employees = Employee.objects.filter(department="SALES")
+        
+        if user in sales_employees:
+            sales_contact_clients = Contract.objects.filter(sales_contact=user)
+            queryset = Contract.objects.filter(id__in=sales_contact_clients)
         return queryset
 
 
 class EventViewset(ModelViewSet):
     permission_classes = [AddGetDjangoModelPermissions]
+
+    filter_backends = [SearchFilter]    
+    search_fields = ['contrat__client__company_name', 'contrat__client__last_name', 'contrat__client__email', 'event_date']
     
     def get_serializer_class(self):
         if self.action == 'list':
@@ -75,9 +87,24 @@ class EventViewset(ModelViewSet):
         return EventDetailSerializer
 
     def get_queryset(self):
-        user = self.request.user
-        print(user.id)
-        print(user)        
-
         queryset = Event.objects.all()
-        return queryset
+        
+        user = Employee.objects.get(id=self.request.user.id)
+
+        sales_employees = Employee.objects.filter(department="SALES")
+        if user in sales_employees:
+            sales_contact_clients = Contract.objects.filter(sales_contact=user)
+            queryset = Event.objects.filter(id__in=sales_contact_clients)
+
+        support_employees = Employee.objects.filter(department="SUPPORT")
+        if user in support_employees:
+            support_contact_clients = Event.objects.filter(support_contact=user)
+            queryset = Event.objects.filter(id__in=support_contact_clients)
+        return queryset    
+
+
+def test_error(request):
+    try:
+        1/0
+    except ZeroDivisionError:
+        return logging.exception("message") 

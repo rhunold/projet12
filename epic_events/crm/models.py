@@ -3,7 +3,9 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from .managers import UserManager
+# from django.core.exceptions import NON_FIELD_ERRORS
+
+from .overrides import UserManager
 from django.core.validators import RegexValidator
 
 
@@ -23,7 +25,9 @@ class Employee(DateMixin, AbstractUser):
     ]
     
     username = None
-    email = models.EmailField(verbose_name='email address', max_length=100, unique=True)
+    email = models.EmailField(verbose_name='email address', max_length=100, unique=True, error_messages ={
+                    "unique":"Cet email est déjà utilisé par un autre compte."
+                    })
     password = models.CharField(verbose_name='password', max_length=100)
     
     first_name = models.CharField(verbose_name='first name', max_length=25)
@@ -49,35 +53,38 @@ class Client(DateMixin, models.Model):
         
     first_name = models.CharField(max_length=25, blank=False)
     last_name = models.CharField(max_length=25, blank=False)
-    email = models.EmailField(max_length=100)
+    email = models.EmailField(max_length=100, unique=True)
     
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,12}$', message="Merci de mettre entre 9 et 12 chiffres.")
     phone = models.CharField(validators=[phone_regex], max_length=12, blank=True)
     mobile = models.CharField(validators=[phone_regex], max_length=12, blank=True)
     
-    client_statut = models.BooleanField(verbose_name='Client', default=False, help_text="Laissez la checkbox vide s'il s'agit d'un prospect") 
+    client_statut = models.BooleanField(verbose_name='Client', default=False,
+                                        help_text="Laissez la checkbox vide s'il s'agit d'un prospect") 
     
     sales_contact = models.ForeignKey(settings.AUTH_USER_MODEL,
                                      on_delete=models.SET_NULL,
-                                     null=True, blank=True)    
+                                     null=True, blank=True, 
+                                     related_name='client')    
     
     def __str__(self):
-        # statut = "Prospect"
-        # if self.client_statut is True:
-        #     statut = "Client"
-        return f"{self.company_name}"    
+
+        return f"{self.company_name}"
     
     class Meta:
         verbose_name = "Client/Prospect"
         verbose_name_plural = "Clients/Prospects"
-        # ordering = ['company_name']
+        ordering = ['company_name']
         
         
 class Contract(DateMixin, models.Model):
 
     sales_contact = models.ForeignKey(settings.AUTH_USER_MODEL,
                                      on_delete=models.SET_NULL,
-                                     null=True, blank=True)
+                                     null=True, blank=True, 
+                                    #  limit_choices_to={"department": "SALES"},
+                                    #  error_messages = {'invalid_choice': "This id is not a Sales personn ID"},                                     
+                                     related_name='contract')
     client = models.ForeignKey(Client, on_delete=models.CASCADE,
                                related_name='contract')
     
@@ -87,29 +94,33 @@ class Contract(DateMixin, models.Model):
     payment_due = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        statut = "Non signé"
-        if self.contrat_statut is True:
-            statut = "Signé"
-        return f"{self.client.company_name} ({statut})"
+        return f"Contrat n°{self.id} : {self.client.company_name}"
 
     class Meta:
         verbose_name = "Contrat"
         verbose_name_plural = "Contrats"
+        # unique_together = ('client', 'payment_due',)
         
         
 class Event(DateMixin, models.Model):
 
-    client = models.ForeignKey(Client, on_delete=models.CASCADE,
-                               related_name='client')
-    contrat = models.OneToOneField(Contract, on_delete=models.CASCADE,
-                                   related_name='event')
+    # client = models.ForeignKey(Client, on_delete=models.CASCADE,
+    #                            related_name='event')
+    
+    contrat = models.ForeignKey(Contract, on_delete=models.SET_NULL,
+                                null=True,
+                                related_name='event')    
+
+    # contrat = models.OneToOneField(Contract, on_delete=models.CASCADE,
+    #                                related_name='event')
 
     support_contact = models.ForeignKey(settings.AUTH_USER_MODEL,
                                        on_delete=models.SET_NULL,
-                                       null=True, blank=True)
+                                       null=True, blank=True,                                   
+                                       related_name='event')
 
-    attendees = models.IntegerField()
-    event_date = models.DateTimeField(auto_now_add=True)
+    attendees = models.PositiveIntegerField()
+    event_date = models.DateTimeField(null=True, blank=True)
     
     notes = models.TextField(max_length=250, null=True, blank=True)
     
@@ -117,12 +128,8 @@ class Event(DateMixin, models.Model):
                                       verbose_name='Terminé')    
 
     def __str__(self):
-        statut = "En cours"
-        if self.event_statut is True:
-            statut = "Terminé"
-
-        return f"({statut})"
+        return f"Event n°{self.id}"
 
     class Meta:
         verbose_name = "Event"        
-        verbose_name_plural = "Events"        
+        verbose_name_plural = "Events"
