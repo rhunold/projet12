@@ -1,0 +1,10 @@
+ERROR 2023-04-07 14:29:46,401 log-Internal Server Error: /test_error/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view crm.views.test_error didn't return an HttpResponse object. It returned None instead.
+ERROR 2023-04-07 14:29:46,402 basehttp-"GET /test_error/ HTTP/1.1" 500 64053
