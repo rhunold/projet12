@@ -5,28 +5,29 @@ Epic Events Employees use a CRM.
 
 Each Employee have specific permissions based on their tasks
 
-Admin can access [the admin](http://127.0.0.1:8000/admin), [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to :
-- create, view, modify and delete Employees, Clients, Contracts and Events
+Admin can access [the admin](http://127.0.0.1:8000/admin) to :
+- create, view, modify and delete every Employees, Clients, Contracts and Events
 - Modify each Group permissions
 
-Managers can access [the admin](http://127.0.0.1:8000/admin), [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to to :
-- create, view, modify and delete Employees (he can create another manager but can not modify it)
+On the [the admin](http://127.0.0.1:8000/admin) Managers can :
 - give permission to Employee depending on their department
-- create, view, modify and delete Clients
-- create, view, modify and delete Contracts
-- create, view, modify and delete Events
+- create, view, modify and delete Employee, Clients, Contracts and Events
+- If a Manager create another manager,  he can not modify it, view it or delete it after it was created
+
+Managers can access [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to :
+- create, view, modify and delete all Clients
+- create, view, modify and delete all Contracts
+- create, view, modify and delete all Events
+
 
 Sales people can access [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to :
-- view Employees, Clients and Events
-- create and view every Clients
-- modify and delete the Clients they are assigned
-- create and view every Contracts
-- modify and delete the Contracts they are assigned
+- create a new Client or a new Contract
+- view, modify or delete the Clients or Contract they are assigned
 - create Events
 
 Support people can access [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to :
-- view Employees and Clients
 - view, modify and delete the Events they are assigned
+- view Clients that are associated to the Events they are assigned
 
 
 This CRM is built on Django and Django Rest Framework
