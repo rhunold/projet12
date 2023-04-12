@@ -5,11 +5,11 @@ Epic Events Employees use a CRM.
 
 Each Employee have specific permissions based on their tasks
 
-Admin can access [the admi](http://127.0.0.1:8000/admin), [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to :
+Admin can access [the admin](http://127.0.0.1:8000/admin), [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to :
 - create, view, modify and delete Employees, Clients, Contracts and Events
 - Modify each Group permissions
 
-Managers can access [the admi](http://127.0.0.1:8000/admin), [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to to :
+Managers can access [the admin](http://127.0.0.1:8000/admin), [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to to :
 - create, view, modify and delete Employees (he can create another manager but can not modify it)
 - give permission to Employee depending on their department
 - create, view, modify and delete Clients
@@ -27,7 +27,6 @@ Sales people can access [the Web browsable API](http://127.0.0.1:8000/api/login/
 Support people can access [the Web browsable API](http://127.0.0.1:8000/api/login/) or use the endpoints with [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) to :
 - view Employees and Clients
 - view, modify and delete the Events they are assigned
-
 
 
 This CRM is built on Django and Django Rest Framework
@@ -76,7 +75,6 @@ Then create a database.
 4) At the end, it will you ask a password = 'epic_events_admin_pass'
 
 
-
 Be sur to have postgress in your path before installing psycopg2 : 
 ``` 
 export PATH=/Library/PostgreSQL/Version/bin:$PATH
@@ -97,7 +95,6 @@ psql -U epic_events_admin epic_events_db -h 127.0.0.1 < epic_events_db_postgresq
 ```
 
 
-
 You can log after you run the server (see next 'Run server' instructions below.)
 #### Access of the actual database
 | typeUser | email | password | user_id 
@@ -110,15 +107,14 @@ You can log after you run the server (see next 'Run server' instructions below.)
 | Support | support1@epicsevents.com | sup_epic_pwd | 6
 | Support | support2@epicsevents.com | sup_epic_pwd | 7
 | None | test@epicsevents.com | test_epic_pwd | 9
-| None | test2@epicsevents.com | test_epic_pwd | 12
+| None | test_a_supprimer@epicsevents.com | test_epic_pwd | 18
 
 
-
-
+### Using a new database
 
 #### Make migrations
 ```
-python3 manage.py makemigrations api
+python3 manage.py makemigrations crm
 ```
 
 #### Migrate
@@ -143,20 +139,7 @@ python3  manage.py runserver
 Server adress : [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 
-
 ## API documentation
 On [Postman](https://documenter.getpostman.com/view/25526925/2s93RZNq8K) you can see all the endpoints and the documentation.
 
-
-## Other things about this project
-This project use the module flake8 to respect pep8 guideline.
-To test it by yourself, go to the root of the project and use this command line to generate a html file in the flake8 folder.
-```
-flake8 softdesk --format=html --htmldir=flake8-report --max-line-length=120 --exclude=migrations
-```
-
-To test with line command without generating a html report
-```
-flake8 crm --max-line-length=120 --exclude=migrations
-```
 
