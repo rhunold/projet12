@@ -39,7 +39,7 @@ class ContractAdmin(ModelAdmin):
         'modified_date',
     ]    
     
-    # Only show Sales Employee in select form
+    # Only show Sales Employee in select form and for clients, do not show prospects
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "sales_contact":
             kwargs["queryset"] = Employee.objects.filter(department__in=['SALES'])
@@ -65,7 +65,7 @@ class EventAdmin(ModelAdmin):
     ]
     
 
-    # Only show Support Employee in select form
+    # Only show Support Employee in select form and only contract signed.
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "support_contact":
             kwargs["queryset"] = Employee.objects.filter(department__in=['SUPPORT'])
@@ -113,7 +113,7 @@ class EmployeeAdmin(UserAdmin):
                             'groups', 'user_permissions', )
             
         else:
-            # modify these to suit the fields you want your staff user to be able to edit
+            # modify these to suit the fields you want the managers users to be able to edit
             perm_fields = ('is_active', 'groups',)
             
 
@@ -152,7 +152,7 @@ class EmployeeAdmin(UserAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         is_superuser = request.user.is_superuser
-        disabled_fields = set()  # type: Set[str]
+        disabled_fields = set()
 
         if not is_superuser: 
             disabled_fields = {
@@ -160,7 +160,6 @@ class EmployeeAdmin(UserAdmin):
                 'user_permissions',
                 'is_staff',          
             }
-
             
         for f in disabled_fields:
             if f in form.base_fields:
