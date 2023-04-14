@@ -141,13 +141,13 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        "rest_framework.authentication.SessionAuthentication",        
-
-        )
+        "rest_framework.authentication.SessionAuthentication",
+        ),
+    'EXCEPTION_HANDLER': 'crm.overrides.custom_exception_handler',
 }
 
 LOGIN_REDIRECT_URL = '/clients/'
-
+# APPEND_SLASH=False
 
 
 SIMPLE_JWT = {
@@ -164,32 +164,37 @@ LOGGING = {
             'style': '{',
         },
         'file': {
-            'format': '{levelname} {asctime} {module}-{message}',
+            'format': '{levelname} {asctime} module : {module}.py / line {lineno:d}  - message : {message} {request} ', #- process : {process:d} - thread : {thread:d} {pathname} 
             'style': '{',
         },
     },
     'loggers': {
-        'django': {
-            'level': 'INFO',
-            'handlers': ['console', 'file'],
-            'propagate': True,
-        },
-   
-        # "django.request": {
-        #     "level": "ERROR",            
-        #     "handlers": ['console', 'file'],
-        #     "propagate": True,
+        # '': {
+        #     'handlers': ['file'],
+        #     'level': 'WARNING',
+        #     'propogate': False,
+        # },        
+        # 'django': {
+        #     'level': 'WARNING',
+        #     'handlers': ['file'], # 'console',
+        #     'propagate': True,
         # },
+   
+        "django.request": {
+            "level": "WARNING",
+            "handlers": ['file'],
+            "propagate": True,
+        },
     },    
     
     'handlers': {
-        'console': {
-            'level': 'INFO',            
-            'class': 'logging.StreamHandler',
-            'formatter': 'console'
-        },        
+        # 'console': {
+        #     'level': 'INFO',
+        #     'class': 'logging.StreamHandler',
+        #     'formatter': 'console'
+        # },
         'file': {
-            'level': 'ERROR',
+            'level': 'WARNING',
             'class': 'logging.FileHandler',
             "formatter": "file",            
             'filename': '../utilities/errors.log',
