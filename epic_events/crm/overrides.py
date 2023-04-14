@@ -1,6 +1,29 @@
 from rest_framework.permissions import DjangoModelPermissions
 from django.contrib.auth.base_user import BaseUserManager
 
+from http import HTTPStatus
+from rest_framework.views import exception_handler
+from rest_framework.exceptions import ValidationError
+
+
+def custom_exception_handler(exc, context):
+    # Call REST framework's default exception handler first,
+    # to get the standard error response.
+    response = exception_handler(exc, context)
+        
+    if response is not None:
+        response.data['status_code'] = response.status_code
+        
+    # # check that a ValidationError exception is raised
+    # if isinstance(exc, ValidationError): 
+    #     # here prepare the 'custom_error_response' and
+    #     # set the custom response data on response object
+    #     custom_error_response = "There is a validation error"
+    #     response.data['validation_error'] = custom_error_response     
+
+    return response
+
+
 
 class UserManager(BaseUserManager):
     """Overide the Manager to allow superuser to be create with an email and not a username"""    
