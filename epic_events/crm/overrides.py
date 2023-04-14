@@ -1,9 +1,7 @@
 from rest_framework.permissions import DjangoModelPermissions
 from django.contrib.auth.base_user import BaseUserManager
-
-from http import HTTPStatus
 from rest_framework.views import exception_handler
-from rest_framework.exceptions import ValidationError
+
 
 
 def custom_exception_handler(exc, context):
