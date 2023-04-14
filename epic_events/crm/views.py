@@ -6,8 +6,6 @@ from .models import Employee, Client, Contract, Event
 
 from .serializers import *
 
-import logging
-
 
 class EmployeeViewset(ModelViewSet):
     permission_classes = [AddGetDjangoModelPermissions]
@@ -96,11 +94,6 @@ class EventViewset(ModelViewSet):
         queryset = Event.objects.all()
         user = Employee.objects.get(id=self.request.user.id)
 
-        # sales_employees = Employee.objects.filter(department="SALES")
-        # if user in sales_employees:
-        #     sales_contact_clients = Contract.objects.filter(sales_contact=user)
-        #     queryset = Event.objects.filter(contrat__in=sales_contact_clients)
-
         support_employees = Employee.objects.filter(department="SUPPORT")
         if user in support_employees:
             support_contact_clients = Event.objects.filter(support_contact=user)
@@ -109,8 +102,8 @@ class EventViewset(ModelViewSet):
         return queryset
 
 
-def test_error(request):
-    try:
-        1/0
-    except ZeroDivisionError:
-        return logging.exception("message")
+# def test_error(request):
+#     try:
+#         1/0
+#     except ZeroDivisionError:
+#         return logging.exception("message")
