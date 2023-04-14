@@ -13,13 +13,6 @@ def custom_exception_handler(exc, context):
         
     if response is not None:
         response.data['status_code'] = response.status_code
-        
-    # # check that a ValidationError exception is raised
-    # if isinstance(exc, ValidationError): 
-    #     # here prepare the 'custom_error_response' and
-    #     # set the custom response data on response object
-    #     custom_error_response = "There is a validation error"
-    #     response.data['validation_error'] = custom_error_response     
 
     return response
 
