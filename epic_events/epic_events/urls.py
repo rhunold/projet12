@@ -6,9 +6,10 @@ from rest_framework import routers
 
 from crm.views import (EmployeeViewset, 
                        ClientViewset, ContractViewset, EventViewset,
-                       test_error) 
+                    #    test_error
+                       ) 
 
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 router = routers.SimpleRouter()
@@ -32,7 +33,7 @@ urlpatterns = [
     # Endpoint API    
     path('', include(router.urls)),
     
-    path('test_error/',test_error, name="test_error")
+    # path('test_error/',test_error, name="test_error")
 
 ]
 
